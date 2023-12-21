@@ -17,11 +17,14 @@ import Foundation
 struct GenerativeAIService {
   /// Gives permission to talk to the backend.
   private let apiKey: String
+    
+    private let baseURL: String?
 
   private let urlSession: URLSession
 
-  init(apiKey: String, urlSession: URLSession) {
+    init(apiKey: String, baseURL: String? = nil, urlSession: URLSession) {
     self.apiKey = apiKey
+        self.baseURL = baseURL
     self.urlSession = urlSession
   }
 
@@ -154,7 +157,13 @@ struct GenerativeAIService {
   // MARK: - Private Helpers
 
   private func urlRequest<T: GenerativeAIRequest>(request: T) throws -> URLRequest {
-    var urlRequest = URLRequest(url: request.url)
+      // replase baseURL with Default base url in GenerativeAIService enum
+      var requestURL = request.url
+      if let baseURL = baseURL {
+          let newUrl = requestURL.absoluteString.replacingOccurrences(of: GenerativeAISwift.baseURL, with: baseURL)
+          requestURL = URL(string: newUrl)!
+      }
+    var urlRequest = URLRequest(url: requestURL)
     urlRequest.httpMethod = "POST"
     urlRequest.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
     urlRequest.setValue("genai-swift/\(GenerativeAISwift.version)",

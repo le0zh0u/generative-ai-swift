@@ -158,7 +158,7 @@ struct GenerativeAIService {
   private func urlRequest<T: GenerativeAIRequest>(request: T) throws -> URLRequest {
       // replase baseURL with Default base url in GenerativeAIService enum
       var requestURL = request.url
-      if let baseURL = baseURL {
+      if let baseURL = baseURL, !baseURL.isEmpty {
           //GenerativeAISwift.baseURL
           let newUrl = requestURL.absoluteString.replacingOccurrences(of: "generativelanguage.googleapis.com", with: baseURL)
           requestURL = URL(string: newUrl)!

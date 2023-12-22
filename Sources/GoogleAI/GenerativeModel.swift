@@ -42,11 +42,13 @@ public final class GenerativeModel {
   ///     should allow.
   public convenience init(name: String,
                           apiKey: String,
+                          baseURL: String? = nil,
                           generationConfig: GenerationConfig? = nil,
                           safetySettings: [SafetySetting]? = nil) {
     self.init(
       name: name,
       apiKey: apiKey,
+      baseURL: baseURL,
       generationConfig: generationConfig,
       safetySettings: safetySettings,
       urlSession: .shared
@@ -56,11 +58,12 @@ public final class GenerativeModel {
   /// The designated initializer for this class.
   init(name: String,
        apiKey: String,
+       baseURL: String? = nil,
        generationConfig: GenerationConfig? = nil,
        safetySettings: [SafetySetting]? = nil,
        urlSession: URLSession) {
     modelResourceName = GenerativeModel.modelResourceName(name: name)
-    generativeAIService = GenerativeAIService(apiKey: apiKey, urlSession: urlSession)
+      generativeAIService = GenerativeAIService(apiKey: apiKey, baseURL:baseURL, urlSession: urlSession)
     self.generationConfig = generationConfig
     self.safetySettings = safetySettings
 
